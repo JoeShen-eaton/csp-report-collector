@@ -16,7 +16,7 @@ RUN adduser -h /app -D -H -g "CSP Report Collector" csprc \
     musl-dev \
     mariadb-dev \
     unixodbc-dev \
-    postgresql \
+    postgresql-client \
   && pip3 install --break-system-packages --user pipenv \
   && chown -Rc csprc:csprc /app \
   && /root/.local/bin/pipenv install --deploy
