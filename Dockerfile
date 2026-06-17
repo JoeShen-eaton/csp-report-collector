@@ -17,6 +17,7 @@ RUN adduser -h /app -D -H -g "CSP Report Collector" csprc \
     mariadb-dev \
     unixodbc-dev \
     postgresql-client \
+    sqlite \
   && pip3 install --break-system-packages --user pipenv \
   && mkdir -p /app/data \
   && chown -Rc csprc:csprc /app \
