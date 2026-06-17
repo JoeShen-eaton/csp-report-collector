@@ -19,7 +19,7 @@ RUN adduser -h /app -D -H -g "CSP Report Collector" csprc \
     postgresql-client \
   && pip3 install --break-system-packages --user pipenv \
   && chown -Rc csprc:csprc /app \
-  && /root/.local/bin/pipenv install --deploy
+  && /root/.local/bin/pipenv install --skip-lock
 
 USER csprc
 EXPOSE 8000
