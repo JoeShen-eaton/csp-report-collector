@@ -24,4 +24,4 @@ RUN adduser -h /app -D -H -g "CSP Report Collector" csprc \
 USER csprc
 EXPOSE 8000
 HEALTHCHECK CMD curl -fs localhost:8000/status
-CMD [".venv/bin/gunicorn", "--workers=2", "--bind=0.0.0.0:8000", "--name=csprc", "--access-logfile=-", "csp_report_collector:app"]
+CMD [".venv/bin/gunicorn", "--workers=2", "--bind=0.0.0.0:8000", "--name=csprc", "--access-logfile=-", "csp_report_collector:create_app()"]
