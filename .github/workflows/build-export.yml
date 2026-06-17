@@ -1,0 +1,24 @@
+name: Build and Export Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t csp-report-collector .
+
+      - name: Save image as tar.gz
+        run: docker save csp-report-collector | gzip > csprc.tar.gz
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: csprc-image
+          path: csprc.tar.gz
+          retention-days: 3
