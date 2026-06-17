@@ -180,8 +180,16 @@ def create_app(override: Optional[dict] = None) -> Flask:
 
 
 ### Routes ###
-@routes.route("/", methods=["POST"])
+@routes.route("/", methods=["POST", "OPTIONS"])
 def csp_receiver():
+    # Handle CORS preflight
+    if request.method == "OPTIONS":
+        response = make_response("", 204)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
     if request.content_type != "application/csp-report":
         abort(400, f"Invalid content type. Expected 'application/csp-report', got '{request.content_type}'.")
 
@@ -199,7 +207,9 @@ def csp_receiver():
     domain = urlparse(document_uri).hostname
 
     if blocked_uri == "about" or document_uri == "about":
-        return make_response(jsonify({}), 204)
+        response = make_response(jsonify({}), 204)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
     elif not blocked_uri:
         if violated_directive == "script-src":
             blocked_uri = "eval"
@@ -216,7 +226,9 @@ def csp_receiver():
             violated_directive=violated_directive,
         )
 
-    return make_response(jsonify({}), 204)
+    response = make_response(jsonify({}), 204)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 @routes.route("/status")
